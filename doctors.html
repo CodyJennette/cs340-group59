@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Coded Coverage - Doctors</title>
+    <link href="tablestyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1> Doctors </h1>
+    <fieldset class="navbar">
+      <a href="/~jennettc/index.html">Home</a>
+      <a href="/~jennettc/insuranceplans.html">Insurance Plans</a>
+        <a href="/~jennettc/patients.html">Patients</a>
+        <a href="/~jennettc/invoices.html">Invoices</a>
+        <a href="/~jennettc/patient_doctors.html">Patient-Doctors</a>
+    </fieldset>
+    </br>
+    </br>
+    <p>Search for doctors <strong>(required fields marked with an asterisk * )</strong></p>
+    <input id="fname_doctor_search" type="text" placeholder="Doctor full name *">
+    <input id="address_doctor_search" type="text" placeholder="Doctor address">
+    </br><p/>
+        <input type="button" value="Search" onClick=":search">
+
+    <table>
+        <thead>
+          <tr>
+            <th>Doctor Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Delete</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+           <tr>
+            <td>1</td>
+                <td>Jessica</td>
+                <td>Day</td>
+                <td>1020 The Loft Lane, Los Angeles CA</td>
+                <td><input type="button" value="Delete" onClick=":delete"></td>
+                <td><input type="button" value="Edit" onClick=":edit"></td>
+              </tr>
+          <tr>
+            <td>2</td>
+              <td>Winston</td>
+              <td>Schmidt</td>
+              <td>1020 The Loft Lane, Los Angeles CA</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>3</td>
+              <td>Cece</td>
+              <td>Parekh</td>
+              <td>1022 The Loft Lane, Los Angeles CA</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Nick</td>
+            <td>Miller</td>
+            <td>1020 The Loft Lane, Los Angeles CA</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Eleanor</td>
+            <td>Shellstrop</td>
+            <td>102 Basic Lane, Phoenix, AZ</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Jason</td>
+            <td>Mendoza</td>
+            <td>21 Box Road, Jacksonville FL</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Good</td>
+            <td>Janet</td>
+            <td>1 Good Place Ave, Orlando FL</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Chidi</td>
+            <td>Anagonye</td>
+            <td>133 Sophocles St, Pittsburgh PA</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+        </tbody>
+    </table>
+
+    <h3>Add Doctor</h3>
+    <table>
+        <thead>
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td><input type="text" placeholder="first name"/>
+            <td><input type="text" placeholder="last name"/>
+            <td><input type="text" placeholder="address"/></td>
+            <td><input type="button" value="Save" onClick=":save"/></td>
+            </tbody>
+            </table>
+        
+        </br>
+
+    <br />
+</body>
+
+</html>

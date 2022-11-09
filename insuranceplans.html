@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Coded Coverage - Insurance Plans</title>
+    <link href="tablestyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1> Insurance Plans </h1>
+    <fieldset class="navbar">
+    <a href="/~jennettc/index.html">Home</a>
+  <a href="/~jennettc/doctors.html">Doctors</a>
+  <a href="/~jennettc/patients.html">Patients We Cover</a>
+  <a href="/~jennettc/invoices.html">Invoices</a>
+  <a href="/~jennettc/patient_doctors.html">Patient-Doctors</a></fieldset>
+    <br />
+    <br/>
+    <p>Search for insurance plans <strong>(required fields marked with an asterisk * )</strong></p>
+    <input id="name_insuranceplan_search" type="text" placeholder="Insurance Plan Name *">
+    <input id="billfrequency_insuranceplan_search" type="text" placeholder="Bill Frequency *">
+    </br><p/>
+        <input type="button" value="Search" onClick=":search">
+    <table>
+        <thead>
+          <tr>
+            <th>Insurance Plan Id</th>
+            <th>Plan Name</th>
+            <th>Number of Patients</th>
+            <th>Bill Frequency</th>
+            <th>Delete</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Diamond</td>
+            <td>5</td>
+            <td>weekly</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Elite</td>
+            <td>5</td>
+            <td>monthly</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>3</td>
+              <td>Coded Elite</td>
+              <td>4</td>
+              <td>bi-weekly</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>4</td>
+              <td>Basic</td>
+              <td>3</td>
+              <td>weekly</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+        </tbody>
+    </table>
+
+    <h3>Add Insurance Plan</h3>
+    <table>
+        <thead>
+            <tr>
+            <th>Plan Name</th>
+            <th>Bill Frequency</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td><input type="text" placeholder="plan name"/>
+            <td><input type="text" placeholder="bill frequency"/>
+            <td><input type="button" value="Save" onClick=":save"/></td>
+            </tbody>
+            </table>
+        
+        </br>
+
+</body>
+
+</html>

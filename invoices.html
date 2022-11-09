@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Coded Coverage - Invoices</title>
+    <link href="tablestyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <table>
+        <h1>Invoices</h1>
+        <fieldset class="navbar">
+        <a href="/~jennettc/index.html">Home</a>
+        <a href="/~jennettc/insuranceplans.html">Insurance Plans</a>
+        <a href="/~jennettc/doctors.html">Doctors</a>
+        <a href="/~jennettc/patients.html">Patients</a>
+        <a href="/~jennettc/patient_doctors.html">Patient-Doctors</a></fieldset>
+    </br><p/>
+    <p>Search for invoices <strong>(required fields marked with an asterisk * )</strong></p>
+    <input id="duedate_invoices_search" type="text" placeholder="Due Date *">
+    <input id="servicedate_invoices_search" type="text" placeholder="Service Date *">
+    <input id="doctorid_invoices_search" type="text" placeholder="Doctor Id *">
+    <input id="patientid_invoices_search" type="text" placeholder="Patient Id *">
+        <input type="button" value="Search" onClick=":search">
+  </br>
+</br>
+        <thead>
+          <tr>
+            <th>Invoice Id</th>
+            <th>Due Date</th>
+            <th>Amount Due</th>
+            <th>Service Date</th>
+            <th>Services Billed</th>
+            <th>Paid Amount</th>
+            <th>Paid Date</th>
+            <th>Doctor Id</th>
+            <th>Patient Id</th>
+            <th>Delete</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>2022-11-12</td>
+            <td>$4.00</td>
+            <td>2022-10-20</td>
+            <td>left when appointment wasn't free</td>
+            <td></td>
+            <td></td>
+            <td>1</td>
+            <td>1</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2022-11-12</td>
+            <td>$100.00</td>
+            <td>2022-10-20</td>
+            <td>anxiety</td>
+            <td></td>
+            <td></td>
+            <td>$100</td>
+            <td>2022-10-20</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>2022-11-19</td>
+            <td>$50.00</td>
+            <td>22-10-19</td>
+            <td>animal bite</td>
+            <td></td>
+            <td></td>
+            <td>3</td>
+            <td>3</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>2022-11-12</td>
+            <td>$100.00</td>
+            <td>2022-10-20</td>
+            <td>physical</td>
+            <td></td>
+            <td></td>
+            <td>4</td>
+            <td>4</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>2022-11-12</td>
+            <td>$250.00</td>
+            <td>2022-10-18</td>
+            <td>broken arm-casted</td>
+            <td></td>
+            <td></td>
+            <td>5</td>
+            <td>5</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+        </tbody>
+    </table>
+    <h3>Add Invoice</h3>
+    <table>
+        <thead>
+            <tr>
+              <th>Due Date</th>
+              <th>Amount Due</th>
+              <th>Service Date</th>
+              <th>Services Billed</th>
+              <th>Paid Amount</th>
+              <th>Paid Date</th>
+              <th>Doctor Id</th>
+              <th>Patient Id</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td><input type="text" placeholder="due date"/>
+            <td><input type="text" placeholder="amount due"/>
+            <td><input type="text" placeholder="service date"/>
+            <td><input type="text" placeholder="services billed"/>
+            <td><input type="text" placeholder="paid amount"/>
+            <td><input type="text" placeholder="paid date"/>
+            <td><input type="text" placeholder="doctor id"/>
+            <td><input type="text" placeholder="patient id"/>
+            <td><input type="button" value="Save" onClick=":save"/></td>
+            </tbody>
+            </table>
+    <br />
+    
+</body>
+
+</html>

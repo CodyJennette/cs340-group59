@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang ="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Coded Coverage - Patients</title>
+    <link href="tablestyle.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1> Patients </h1>
+    <fieldset class="navbar"><a href="/~jennettc/index.html">Home</a>
+      <a href="/~jennettc/insuranceplans.html">Insurance Plans</a>
+      <a href="/~jennettc/doctors.html">Doctors</a>
+      <a href="/~jennettc/invoices.html">Invoices</a>
+      <a href="/~jennettc/patient_doctors.html">Patient-Doctors</a></fieldset>
+    <br/>
+  </br><p>Search for patients <strong>(required fields marked with an asterisk * )</strong></p>
+  <input id="fname_patient_search" type="text" placeholder="Patient first name *">
+  <input id="lname_patient_search" type="text" placeholder="Patient last name *">
+  <input id="planid_patient_search" type="text" placeholder="Plan Id *">
+    </br><p/>
+        <input type="button" value="Search" onClick=":search">
+    <table>
+        <thead>
+          <tr>
+            <th>Patient Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Insurance Plan Id</th>
+            <th>Delete</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Ron</td>
+            <td>Swanson</td>
+            <td>1</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Leslie</td>
+            <td>Knope</td>
+            <td>1</td>
+            <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+              <td>3</td>
+              <td>April</td>
+              <td>Ludgate</td>
+              <td>1</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+              <td>4</td>
+              <td>Ben</td>
+              <td>Wyatt</td>
+              <td>1</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+          <tr>
+              <td>5</td>
+              <td>Andy</td>
+              <td>Dwyler</td>
+              <td>1</td>
+              <td><input type="button" value="Delete" onClick=":delete"></td>
+            <td><input type="button" value="Edit" onClick=":edit"></td>
+          </tr>
+        </tbody>
+    </table>
+    <h3>Add Patient</h3>
+    <table>
+        <thead>
+            <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Insurance Plan Id</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td><input type="text" placeholder="first name"/>
+            <td><input type="text" placeholder="last name"/>
+            <td><input type="text" placeholder="Insurance Plan Id"/></td>
+            <td><input type="button" value="Save" onClick=":save"/></td>
+            </tbody>
+            </table>
+        
+        </br>
+  
+</body>
+
+</html>
