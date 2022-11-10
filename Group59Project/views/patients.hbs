@@ -1,0 +1,125 @@
+
+<a href="/">Home</a>
+<h2>Patients</h2>
+<p>View, add, delete, and update <strong>patients</strong> here.</p>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+{{!-- Create a table --}}
+<table id="people-table">>
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Insurance Plan</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, insurance and age, in order --}}
+        {{#each data}}
+        <tr data-value={{this.patient_id}}>>
+            <td>{{this.patient_id}}</td>
+            <td>{{this.patient_first_name}}</td>
+            <td>{{this.patient_last_name}}</td>
+            <td>{{this.insurance_plan_id}}</td>
+            <td><button onclick="deletePatient({{this.patient_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_patient.js"></script>
+
+<!-- /views/index.hbs -->
+<h3 class="add-db">Add a patient here...</h3>
+<p>To add a new patient, please enter their information below and click `Submit`!</p>
+<form id="add-patient-form" method="POST" action="/add-patient-form">
+    <label for="input-fname">First Name: </label>
+    <input type="text" name="input-fname" id="input-fname-ajax">
+    
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="input-lname" id="input-lname-ajax">
+
+    <label for="input-insurance">Insurance Plan: </label>
+    <select name="input-insurance" id="input-insurance-ajax">
+        <option value="">Select an Insurance Plan</option>
+        {{#each plans}}
+        <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
+<!-- /views/index.hbs -->
+
+</br>
+<h3 class="add-db">Or here</h3>
+<p>To add a new patient, please enter their information below and click 'Submit'!</p>
+<form id="add-patient-form-ajax">
+    <label for="input-fname">First Name: </label>
+    <input type="text" name="input-fname" id="input-fname">
+    
+    <label for="input-lname">Last Name: </label>
+    <input type="text" name="input-lname" id="input-lname">
+
+    <label for="input-insurance">Insurance Plan: </label>
+    <select name="input-insurance" id="input-insurance">
+        <option value="">Select an Insurance Plan</option>
+        {{#each plans}}
+        <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_patient.js"></script>
+
+</br>
+<h3 class="search-db">Search for a patient an HTML Form</h3>
+<p>Search for patients by last name</p>
+<form id="search-person-html" method='GET' action='/patients'>
+    <label for="input-lname">Search by Last Name: </label>
+    <input type="text" name="patient_last_name" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/patients'><button>Reset</button></a>
+</form>
+</br>
+
+<h3 class="add-db">Updating A User's Insurance</h3>
+<p></p>
+<form id="update-person-form-ajax">
+
+    <label for="input-fullname">Full name: </label>
+    <select name="input-fullname" id="mySelect">
+        <option value="test">Select a Patient</option>
+        {{#each data}}
+        <option value="{{this.patient_id}}">{{this.patient_first_name}} {{this.patient_last_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-insurance">Insurance Plan: </label>
+    <select name="input-insurance" id="input-insurance-update">
+        <option>Select an Insurance Plan</option>
+        {{#each plans}}
+        <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
+        {{/each}}
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_person.js"></script>
