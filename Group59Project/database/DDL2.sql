@@ -88,7 +88,7 @@ CREATE OR REPLACE TABLE `Patients_Doctors` (
   INDEX `fk_Patients_has_Doctors_Doctors1_idx` (`doctor_id` ASC) VISIBLE,
   INDEX `fk_Patients_has_Doctors_Patients1_idx` (`patient_doctor_id` ASC, `patient_id` ASC) VISIBLE,
   CONSTRAINT `fk_Patients_has_Doctors_Patients1`
-    FOREIGN KEY (`patient_doctor_id`)
+    FOREIGN KEY (`patient_id`)
     REFERENCES `Patients` (`patient_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,

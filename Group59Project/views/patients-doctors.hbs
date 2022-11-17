@@ -1,0 +1,112 @@
+<a href="/">Home</a>
+<h2>Patients' Doctors</h2>
+<p>View, add, delete, and update <strong> patients & doctors </strong> here.</p>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+
+{{!-- Create a table --}}
+<table id="pd-table">>
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            <th>Id</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        
+        {{#each data}}
+        <tr data-value={{this.patient_doctor_id}}>>
+            <td>{{this.patient_doctor_id}}</td>
+            <td>{{this.patient_id}}</td>
+            <td>{{this.doctor_id}}</td>
+            <td><button onclick="deletePatientDoctor({{this.patient_doctor_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_patient-doctor.js"></script>
+
+
+<h3 class="add-db">Add a patient-doctor here...</h3>
+<p>To add a new patient, please enter their information below and click `Submit`!</p>
+<form id="add-patient-doctor-form" method="POST" action="/add-patient-doctor-form">
+    <label for="input-patient">Patient: </label>
+    <select name="input-patient" id="input-patient-ajax">
+        <option value="">Select a Patient</option>
+        {{#each patients}}
+        <option value="{{this.patient_id}}">{{this.patient_first_name}}  {{this.patient_last_name}}</option>
+        {{/each}}
+    </select>>
+
+    <label for="input-doctor">Doctor: </label>
+    <select name="input-doctor" id="input-doctor-ajax">
+        <option value="">Select a Doctor</option>
+        {{#each doctors}}
+        <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
+
+</br>
+
+
+
+</br>
+<h3 class="search-db">Search</h3>
+<p>Search for patients (by last name)</p>
+<form id="search-patient-html" method='GET' action='/patients-doctors'>
+    <label for="input-patient-lname">Search by Last Name: </label>
+    <input type="text" name="patient_last_name" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/patients-doctors'><button>Reset</button></a>
+</form>
+</br>
+<p>Or search for doctors</p>
+<form id="search-doctor-html" method='GET' action='/patients-doctors'>
+    <label for="input-doctor-name">Search by Name: </label>
+    <input type="text" name="doctor_name" id="input-lname-html-search">
+    
+    <input type="submit">
+    <a href='/patients-doctors'><button>Reset</button></a>
+</form>
+</br>
+
+<h3 class="add-db">Updating A Patient's Doctor</h3>
+<p></p>
+<form id="update-person-form-ajax">
+
+    <label for="input-patient-fullname">Full name: </label>
+    <select name="input-patient-fullname" id="patientSelect">
+        <option value="test">Select a Patient</option>
+        {{#each patients}}
+        <option value="{{this.patient_id}}">{{this.patient_first_name}} {{this.patient_last_name}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-insurance">Doctor: </label>
+    <select name="input-insurance" id="doctorSelect">
+        <option>Select a new Doctor</option>
+        {{#each doctors}}
+        <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+        {{/each}}
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_patient-doctor.js"></script>

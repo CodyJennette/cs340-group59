@@ -5,9 +5,8 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 25012;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 25011;                 // Set a port number at the top so it's easy to change in the future
 
-// app.js
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
 app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
@@ -22,12 +21,12 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'));         // this is needed to allow for the form to use the ccs style sheet/javscript
     
 
-
+// index home page
 app.get('/', function(req, res)
 {
     return res.render('index');
 });
-// app.js
+
 app.get('/patients', function(req, res)
 {
     // Declare Query 1
@@ -51,16 +50,14 @@ app.get('/patients', function(req, res)
     // Run the 1st query
     db.pool.query(query1, function(error, rows, fields){
         
-        // Save the people
+        // Save the people/patients
         let people = rows;
         
         // Run the second query
         db.pool.query(query2, (error, rows, fields) => {
             
-            // Save the planets
+            // Save the insurance plan table rows
             let plans = rows;
-
-            // BEGINNING OF NEW CODE
 
             // Construct an object for reference in the table
             // Array.map is awesome for doing something with each
@@ -73,13 +70,140 @@ app.get('/patients', function(req, res)
                 //console.log(planmap[id])
             })
 
-            // Overwrite the homeworld ID with the name of the planet in the people object
+            // Overwrite the Insurance ID with the name of the insurance in the people object
             people = people.map(person => {
                 return Object.assign(person, {insurance_plan_id: planmap[person.insurance_plan_id]})
             })
 
-            // END OF NEW CODE
             return res.render('patients', {data: people, plans: plans});
+        })
+    })
+});
+
+app.get('/insurance-plans', function(req, res)
+    {
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.plan_name === undefined)
+    {
+        query1 = "SELECT * FROM InsurancePlans;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM InsurancePlans WHERE plan_name LIKE "${req.query.plan_name}%" OR plan_name LIKE "%${req.query.plan_name}%";`
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+        
+        let plans = rows;
+
+        return res.render('insurance-plans.hbs', {data: plans});
+
+    })
+});
+
+app.get('/doctors', function(req, res)
+    {
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.doctor_name === undefined)
+    {
+        query1 = "SELECT * FROM Doctors;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Doctors WHERE doctor_name LIKE "${req.query.doctor_name}%" OR doctor_name LIKE "%${req.query.doctor_name}%";`
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+        
+        let doctors = rows;
+
+        return res.render('doctors.hbs', {data: doctors});
+
+    })
+});
+
+app.get('/patients-doctors', function(req, res)
+{
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if ((req.query.patient_last_name === undefined) && (req.query.doctor_name === undefined))
+    {
+        query1 = "SELECT * FROM Patients_Doctors;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else if (req.query.patient_last_name != undefined)
+    {
+        query1 = `SELECT Patients_Doctors.patient_doctor_id, Patients.patient_id, Patients_Doctors.doctor_id FROM Patients_Doctors
+        INNER JOIN Patients ON Patients.patient_id = Patients_Doctors.patient_id
+        WHERE Patients.patient_last_name LIKE "${req.query.patient_last_name}%"
+        ORDER BY Patients.patient_last_name;`
+    }
+
+    else if (req.query.doctor_name != undefined)
+    {
+        query1=`SELECT Patients_Doctors.patient_doctor_id, Patients_Doctors.patient_id, Doctors.doctor_id FROM Patients_Doctors
+        INNER JOIN Doctors ON Doctors.doctor_id = Patients_Doctors.doctor_id
+        WHERE Doctors.doctor_name LIKE "${req.query.doctor_name}%" OR doctor_name LIKE "%${req.query.doctor_name}%"
+        ORDER BY Doctors.doctor_name;`
+    }
+
+    
+    let query2 = "SELECT * FROM Patients ORDER BY Patients.patient_last_name;";
+    let query3 = "SELECT * FROM Doctors;"
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+        
+        // Save the table rows
+        let patientDoctors = rows;
+        
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+            
+            // Save the patients
+            let patients = rows;
+            
+            
+
+            let planmap = {}
+            patients.map(plan => {
+                let id = parseInt(plan.patient_id, 10);
+                planmap[id] = [plan["patient_first_name"], plan["patient_last_name"]].join(' ');
+            })
+            console.log(planmap)
+
+            // Run the third query
+            db.pool.query(query3, (error, rows, fields) => {
+
+                let doctors = rows;
+                console.log(doctors);
+                let doctormap = {}
+
+                doctors.map(doctor => {
+                    let id = parseInt(doctor.doctor_id, 10);
+                    doctormap[id] = doctor["doctor_name"];
+                    })
+                console.log("doctormap", doctormap)
+                patientDoctors = patientDoctors.map(person => {
+                    return Object.assign(person, {doctor_id: doctormap[person.doctor_id], patient_id: planmap[person.patient_id]})   
+                })
+                return res.render('patients-doctors.hbs', {data: patientDoctors, patients: patients, doctors: doctors});
+            })
+            
         })
     })
 });
@@ -234,10 +358,174 @@ app.put('/put-person-ajax', function(req,res,next){
               }
   })});
 
+//////////////  DOCTORS
 
-  ////////////
 
+app.post('/add-doctor-form', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    //formatData(data);
+    // Capture NULL values
+    //let address = parseInt(data['input-address']);
+    let first = data['input-fname'];
+    let last = data['input-lname'];
+    let fullName = [first,' ', last].join('');
+    let address = data['input-address'];
+    console.log(address)
+
+    query1 = `INSERT INTO Doctors (doctor_name, doctor_address) VALUES ('${fullName}', '${address}')`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
+        // presents it on the screen
+        else
+        {
+            res.redirect('doctors');
+        }
+    })
+});
+
+app.post('/add-doctor-ajax', function(req, res)
+{
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    formatData(data)
+    // Capture NULL values of Name.
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Doctors (doctor_name, doctor_address) VALUES ('${data.doctor_name}', '${data.address}')`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else
+        {   
+            //if there was no error, perform a SELECT * on Doctors
+            query2 = `SELECT * FROM Doctors;`;
+            db.pool.query(query2, function(error, rows, fields){
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+app.post('/add-patient-doctor-form', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+    let patient= data['input-patient'];
+    let doctor = data['input-doctor'];
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Patients_Doctors (patient_id, doctor_id) VALUES ('${data['input-patient']}', '${data['input-doctor']}')`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM Patients and
+        // presents it on the screen
+        else
+        {
+            res.redirect('patients-doctors');
+        }
+    })
+});
+app.delete('/delete-doctor-ajax/', function(req,res,next){
+  let data = req.body;
+  let doctorID = parseInt(data.doctor_id);
+  let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE doctor_id = ?`;
+  let deleteDoctors = `DELETE FROM Doctors WHERE doctor_id = ?`;
+
+
+        // Run the 1st query
+        db.pool.query(deletePatients_Doctors, [doctorID], function(error, rows, fields){
+            if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+            }
+
+            else
+            {
+                // Run the second query
+                db.pool.query(deleteDoctors, [doctorID], function(error, rows, fields) {
+
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400); 
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+            }
+})});
+
+app.put('/put-doctor-ajax', function(req,res,next){                                   
+    let data = req.body;
+    formatData(data)
+    
+    let address= data.address;
+    let doctor = parseInt(data.fullname);
   
+    queryUpdateAddress = `UPDATE Doctors SET address = ? WHERE Doctors.doctor_id = ?`;
+    //selectPlan = `SELECT * FROM InsurancePlans WHERE insurance_plan_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateAddress, [address, doctor], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                res.send(rows);
+              }
+  })});
+  
+// function to be use with routes to turn empty strings into NULL values for DB
+function formatData(data) {
+    for (const key of Object.keys(data)) {
+        if (typeof data[key]=== 'string') {
+            if (data[key].trim()==='') {
+                data[key] = null
+            } else {
+                data[key]= `${data[key]}`;
+            }
+        }
+    }
+    return;
+}
   /*
       LISTENER
   */
