@@ -1,5 +1,4 @@
-// Creates a single row from an Object representing a single record from 
-// bsg_people
+// Get the objects we need to modify
 let addDoctorForm = document.getElementById('add-doctor-form-ajax');
 
 // Modify the objects we need

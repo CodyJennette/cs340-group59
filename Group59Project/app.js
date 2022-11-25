@@ -134,6 +134,35 @@ app.get('/doctors', function(req, res)
     })
 });
 
+
+app.get('/invoices', function(req, res)
+    {
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.services_billed === undefined)
+    {
+        query1 = "SELECT * FROM Invoices;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Invoices WHERE services_billed LIKE "${req.query.services_billed}%" OR services_billed LIKE "%${req.query.services_billed}%";`
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+        
+        let invoices = rows;
+
+        return res.render('invoices.hbs', {data: invoices});
+
+    })
+});
+
+
 app.get('/patients-doctors', function(req, res)
 {
     // Declare Query 1
@@ -208,8 +237,6 @@ app.get('/patients-doctors', function(req, res)
     })
 });
 
-//////////////
-
 
 app.post('/add-patient-form', function(req, res){
     // Capture the incoming data and parse it back to a JS object
@@ -242,6 +269,40 @@ app.post('/add-patient-form', function(req, res){
         }
     })
 });
+
+
+app.post('/add-invoice-form', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let invoice = req.body;
+
+    // Capture NULL values
+    let paid_amount = parseInt(invoice['input-paidamount']);
+    if (isNaN(paid_amount))
+    {
+        paid_amount = 'NULL'
+    }
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Invoices (due_date, amount_due, service_date, services_billed, paid_amount, paid_date, doctor_id, patient_id) VALUES ('${invoice['input-duedate']}', '${invoice['input-amountdue']}', '${invoice['input-servicedate']}', '${invoice['input-servicesbilled']}', '${paid_amount}', '${invoice['input-paiddate']}', '${invoice['input-doctor']}', '${invoice['input-patient']}')`;
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM Invoices and
+        // presents it on the screen
+        else
+        {
+            res.redirect('invoices');
+        }
+    })
+});
+
 
 app.post('/add-patient-ajax', function(req, res)
 {
@@ -455,6 +516,37 @@ app.post('/add-patient-doctor-form', function(req, res){
         }
     })
 });
+
+app.delete('/delete-invoice-ajax/', function(req,res,next){
+    let invoice = req.body;
+    let invoiceID = parseInt(invoice.invoice_id);
+    let deleteInvoices = `DELETE FROM Invoices WHERE invoice_id = ?`;
+  
+  
+          // Run the 1st query
+          db.pool.query(deleteInvoices, [invoiceID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              else
+              {
+                  // Run the second query
+                  db.pool.query(deleteInvoices, [invoiceID], function(error, rows, fields) {
+  
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400); 
+                      } else {
+                          res.sendStatus(204);
+                      }
+                  })
+              }
+  })});
+
 app.delete('/delete-doctor-ajax/', function(req,res,next){
   let data = req.body;
   let doctorID = parseInt(data.doctor_id);

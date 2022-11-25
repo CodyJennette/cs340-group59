@@ -3,7 +3,7 @@
 -- Corianne Frankovitch
 -- Cody Jennette
 
--- Project Step 3 Final Version
+-- Project Step 5 Draft Version
 -- DML.sql
 
 -- Create a new patient

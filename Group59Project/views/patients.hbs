@@ -1,10 +1,12 @@
-
 <a href="/">Home</a>
+<a href="/doctors">Doctors</a>
+<a href="/insurance-plans">Insurance Plans</a>
+<a href="/invoices">Invoices</a>
+<a href="/patients-doctors">Patients' Doctors</a>
+
 <h2>Patients</h2>
 <p>View, add, delete, and update <strong>patients</strong> here.</p>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-
 
 {{!-- Create a table --}}
 <table id="people-table">>
@@ -42,7 +44,7 @@
 
 <!-- /views/index.hbs -->
 <h3 class="add-db">Add a patient here...</h3>
-<p>To add a new patient, please enter their information below and click `Submit`!</p>
+<p>To add a new patient, please enter their information below and click `Submit`! Both a first and last name MUST be entered.</p>
 <form id="add-patient-form" method="POST" action="/add-patient-form">
     <label for="input-fname">First Name: </label>
     <input type="text" name="input-fname" id="input-fname-ajax">
@@ -64,25 +66,7 @@
 <!-- /views/index.hbs -->
 
 </br>
-<h3 class="add-db">Or here</h3>
-<p>To add a new patient, please enter their information below and click 'Submit'!</p>
-<form id="add-patient-form-ajax">
-    <label for="input-fname">First Name: </label>
-    <input type="text" name="input-fname" id="input-fname">
-    
-    <label for="input-lname">Last Name: </label>
-    <input type="text" name="input-lname" id="input-lname">
 
-    <label for="input-insurance">Insurance Plan: </label>
-    <select name="input-insurance" id="input-insurance">
-        <option value="">Select an Insurance Plan</option>
-        {{#each plans}}
-        <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
-        {{/each}}
-    </select>
-
-    <input type="submit">
-</form>
 
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
 <script src="./js/add_patient.js"></script>

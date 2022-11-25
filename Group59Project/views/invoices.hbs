@@ -1,0 +1,84 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<a href="/">Home</a>
+<a href="/patients">Patients</a>
+<a href="/doctors">Doctors</a>
+<a href="/insurance-plans">Insurance Plans</a>
+<a href="/patients-doctors">Patients' Doctors</a>
+
+<h2>Invoices</h2>
+<p>View, add, delete, and update <strong>invoices</strong> here.</p>
+
+<table id="invoice-table">>
+
+    <thead>
+
+        <tr>
+            <th>Id</th>
+            <th>Due Date</th>
+            <th>Amount due</th>
+            <th>Service Date</th>
+            <th>Services Billed</th>
+            <th>Paid Amount</th>
+            <th>Paid Date</th>
+            <th>Doctor</th>
+            <th>Patient</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, address and age, in order --}}
+        {{#each data}}
+        <tr data-value={{this.invoice_id}}>>
+            <td>{{this.invoice_id}}</td>
+            <td>{{this.due_date}}</td>
+            <td>{{this.amount_due}}</td>
+            <td>{{this.service_date}}</td>
+            <td>{{this.services_billed}}</td>
+            <td>{{this.paid_amount}}</td>
+            <td>{{this.paid_date}}</td>
+            <td>{{this.doctor_id}}</td>
+            <td>{{this.patient_id}}</td>
+            <td><button onclick="deleteInvoice({{this.invoice_id}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_invoice.js"></script>
+
+<!-- /views/index.hbs -->
+<h3 class="add-db">Add an invoice here...</h3>
+<p>To add a new invoice, please enter the information below and click `Submit`!</p>
+<form id="add-invoice-form" method="POST" action="/add-invoice-form">
+
+    <label for="input-duedate">Due Date: </label>
+    <input type="date" name="input-duedate" id="input-duedate-ajax">
+    
+    <label for="input-amountdue">Amount Due: </label>
+    <input type="text" name="input-amountdue" id="input-amountdue-ajax">
+
+    <label for="input-servicedate">Service Date: </label>
+    <input type="date" name="input-servicedate" id="input-servicedate-ajax">
+
+    <label for="input-servicesbilled">Services Billed: </label>
+    <input type="text" name="input-servicesbilled" id="input-servicesbilled-ajax">
+
+    <label for="input-paidamount">Paid Amount: </label>
+    <input type="text" name="input-paidamount" id="input-paidamount-ajax">
+
+    <label for="input-paiddate">Paid Date: </label>
+    <input type="date" name="input-paiddate" id="input-paiddate-ajax">
+
+    <label for="input-doctor">Doctor: </label>
+    <input type="text" name="input-doctor" id="input-doctor-ajax">
+
+    <label for="input-patient">Patient: </label>
+    <input type="text" name="input-patient" id="input-patient-ajax">
+
+    <input type="submit">
+</form>
+
+<script src="./js/add_invoice.js"></script>
