@@ -1,8 +1,10 @@
-<a href="/">Home</a>
-<a href="/patients">Patients</a>
-<a href="/doctors">Doctors</a>
-<a href="/insurance-plans">Insurance Plans</a>
-<a href="/invoices">Invoices</a>
+<div class="navbar">
+        <a href="/">Home</a>
+        <a href="/doctors">Doctors</a>
+        <a href="/patients">Patients</a>
+        <a href="/insurance-plans">Insurance Plans</a>
+        <a href="/invoices">Invoices</a>
+</div>
 
 <h2>Patients' Doctors</h2>
 <p>View, add, delete, and update <strong> patients & doctors </strong> here.</p>
@@ -41,77 +43,84 @@
     </tbody>
 </table>
 <script src="./js/delete_patient-doctor.js"></script>
-
-
-<h3 class="add-db">Add a patient-doctor here...</h3>
-<p>To add a new patient, please enter their information below and click `Submit`!</p>
-<form id="add-patient-doctor-form" method="POST" action="/add-patient-doctor-form">
-    <label for="input-patient">Patient: </label>
-    <select name="input-patient" id="input-patient-ajax">
-        <option value="">Select a Patient</option>
-        {{#each patients}}
-        <option value="{{this.patient_id}}">{{this.patient_first_name}}  {{this.patient_last_name}}</option>
-        {{/each}}
-    </select>>
-
-    <label for="input-doctor">Doctor: </label>
-    <select name="input-doctor" id="input-doctor-ajax">
-        <option value="">Select a Doctor</option>
-        {{#each doctors}}
-        <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
-        {{/each}}
-    </select>
-
-    <input type="submit">
-</form>
-
-
 </br>
 
+<div class="box">
+    <div class="add-db">
+    <h3>Add a patient-doctor here...</h3>
+        <form class="box-sub" id="add-patient-doctor-form" method="POST" action="/add-patient-doctor-form">
+            <p>To add a new patient, please enter their information below and click `Submit`!</p>
+            <label for="input-patient">Patient: </label>
+            <select name="input-patient" id="input-patient-ajax">
+                <option value="">Select a Patient</option>
+                {{#each patients}}
+                <option value="{{this.patient_id}}">{{this.patient_first_name}}  {{this.patient_last_name}}</option>
+                {{/each}}
+            </select>
 
+            <label for="input-doctor">Doctor: </label>
+            <select name="input-doctor" id="input-doctor-ajax">
+                <option value="">Select a Doctor</option>
+                {{#each doctors}}
+                <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+                {{/each}}
+            </select>
 
-</br>
-<h3 class="search-db">Search</h3>
-<p>Search for patients (by last name)</p>
-<form id="search-patient-html" method='GET' action='/patients-doctors'>
-    <label for="input-patient-lname">Search by Last Name: </label>
-    <input type="text" name="patient_last_name" id="input-lname-html-search">
+            <input type="submit">
+        </form>
     
-    <input type="submit">
-    <a href='/patients-doctors'><button>Reset</button></a>
-</form>
-</br>
-<p>Or search for doctors</p>
-<form id="search-doctor-html" method='GET' action='/patients-doctors'>
-    <label for="input-doctor-name">Search by Name: </label>
-    <input type="text" name="doctor_name" id="input-lname-html-search">
+
+    </br>
     
-    <input type="submit">
-    <a href='/patients-doctors'><button>Reset</button></a>
-</form>
-</br>
+    </br>
+    <div class="box-dot">
+        <h3>Search</h3>
+        <form class="box-sub" id="search-patient-html" method='GET' action='/patients-doctors'>
+            <p>Search for patients (by last name)</p>
+            <label for="input-patient-lname">Search by Last Name: </label>
+            <input type="text" name="patient_last_name" id="input-lname-html-search">
+            
+            <input type="submit">
+            <a href='/patients-doctors'><button>Reset</button></a>
+        </form>
+        </br>
+        
+        <form class="box-sub" id="search-doctor-html" method='GET' action='/patients-doctors'>
+            <p>Or search for doctors</p>
+            <label for="input-doctor-name">Search by Name: </label>
+            <input type="text" name="doctor_name" id="input-lname-html-search">
+            
+            <input type="submit">
+            <a href='/patients-doctors'><button>Reset</button></a>
+        </form>
+    </div>
+    
 
-<h3 class="add-db">Updating A Patient's Doctor</h3>
-<p></p>
-<form id="update-person-form-ajax">
+    </br>
 
-    <label for="input-patient-fullname">Full name: </label>
-    <select name="input-patient-fullname" id="patientSelect">
-        <option value="test">Select a Patient</option>
-        {{#each patients}}
-        <option value="{{this.patient_id}}">{{this.patient_first_name}} {{this.patient_last_name}}</option>
-        {{/each}}
-    </select>
+    <h3>Updating A Patient's Doctor</h3>
 
-    <label for="input-insurance">Doctor: </label>
-    <select name="input-insurance" id="doctorSelect">
-        <option>Select a new Doctor</option>
-        {{#each doctors}}
-        <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
-        {{/each}}
-    </select>
-    <input type="submit">
+        <form class="box-sub" id="update-person-form-ajax">
 
-</form>
+            <label for="input-patient-fullname">Full name: </label>
+            <select name="input-patient-fullname" id="patientSelect">
+                <option value="test">Select a Patient</option>
+                {{#each patients}}
+                <option value="{{this.patient_id}}">{{this.patient_first_name}} {{this.patient_last_name}}</option>
+                {{/each}}
+            </select>
+
+            <label for="input-insurance">Doctor: </label>
+            <select name="input-insurance" id="doctorSelect">
+                <option>Select a new Doctor</option>
+                {{#each doctors}}
+                <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+                {{/each}}
+            </select>
+            <input type="submit">
+
+        </form>
+    
+</div>
 
 <script src="./js/update_patient-doctor.js"></script>

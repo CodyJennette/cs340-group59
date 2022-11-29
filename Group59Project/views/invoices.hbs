@@ -1,10 +1,12 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<a href="/">Home</a>
-<a href="/patients">Patients</a>
-<a href="/doctors">Doctors</a>
-<a href="/insurance-plans">Insurance Plans</a>
-<a href="/patients-doctors">Patients' Doctors</a>
+<div class="navbar">
+        <a href="/">Home</a>
+        <a href="/patients">Patients</a>
+        <a href="/doctors">Doctors</a>
+        <a href="/patients-doctors">Patients' Doctors</a>
+        <a href="/insurance-plans">Insurance Plans</a>
+</div>
 
 <h2>Invoices</h2>
 <p>View, add, delete, and update <strong>invoices</strong> here.</p>
@@ -49,36 +51,43 @@
 </table>
 <script src="./js/delete_invoice.js"></script>
 
+</br>
+
 <!-- /views/index.hbs -->
-<h3 class="add-db">Add an invoice here...</h3>
-<p>To add a new invoice, please enter the information below and click `Submit`!</p>
-<form id="add-invoice-form" method="POST" action="/add-invoice-form">
+<div class="box">
+    <div class="add-db">
+        <h3>Add an invoice here...</h3>
+        
+        <form class="box-sub" id="add-invoice-form" method="POST" action="/add-invoice-form">
+            <p>To add a new invoice, please enter the information below and click `Submit`!</p>
 
-    <label for="input-duedate">Due Date: </label>
-    <input type="date" name="input-duedate" id="input-duedate-ajax">
-    
-    <label for="input-amountdue">Amount Due: </label>
-    <input type="text" name="input-amountdue" id="input-amountdue-ajax">
+            <label for="input-duedate">Due Date: </label>
+            <input type="date" name="input-duedate" id="input-duedate-ajax">
+            
+            <label for="input-amountdue">Amount Due: </label>
+            <input type="text" name="input-amountdue" id="input-amountdue-ajax">
 
-    <label for="input-servicedate">Service Date: </label>
-    <input type="date" name="input-servicedate" id="input-servicedate-ajax">
+            <label for="input-servicedate">Service Date: </label>
+            <input type="date" name="input-servicedate" id="input-servicedate-ajax">
 
-    <label for="input-servicesbilled">Services Billed: </label>
-    <input type="text" name="input-servicesbilled" id="input-servicesbilled-ajax">
+            <label for="input-servicesbilled">Services Billed: </label>
+            <input type="text" name="input-servicesbilled" id="input-servicesbilled-ajax">
 
-    <label for="input-paidamount">Paid Amount: </label>
-    <input type="text" name="input-paidamount" id="input-paidamount-ajax">
+            <label for="input-paidamount">Paid Amount: </label>
+            <input type="text" name="input-paidamount" id="input-paidamount-ajax">
 
-    <label for="input-paiddate">Paid Date: </label>
-    <input type="date" name="input-paiddate" id="input-paiddate-ajax">
+            <label for="input-paiddate">Paid Date: </label>
+            <input type="date" name="input-paiddate" id="input-paiddate-ajax">
 
-    <label for="input-doctor">Doctor: </label>
-    <input type="text" name="input-doctor" id="input-doctor-ajax">
+            <label for="input-doctor">Doctor: </label>
+            <input type="text" name="input-doctor" id="input-doctor-ajax">
 
-    <label for="input-patient">Patient: </label>
-    <input type="text" name="input-patient" id="input-patient-ajax">
+            <label for="input-patient">Patient: </label>
+            <input type="text" name="input-patient" id="input-patient-ajax">
 
-    <input type="submit">
-</form>
+            <input type="submit">
+        </form>
+    </div>
+</div>
 
 <script src="./js/add_invoice.js"></script>

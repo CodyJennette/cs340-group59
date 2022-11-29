@@ -1,10 +1,12 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<a href="/">Home</a>
-<a href="/patients">Patients</a>
-<a href="/insurance-plans">Insurance Plans</a>
-<a href="/invoices">Invoices</a>
-<a href="/patients-doctors">Patients' Doctors</a>
+<div class="navbar">
+        <a href="/">Home</a>
+        <a href="/patients">Patients</a>
+        <a href="/invoices">Invoices</a>
+        <a href="/patients-doctors">Patients' Doctors</a>
+        <a href="/insurance-plans">Insurance Plans</a>
+</div>
 
 <h2>Doctors</h2>
 <p>View, add, delete, and update <strong>doctors</strong> here.</p>
@@ -40,53 +42,63 @@
 </table>
 <script src="./js/delete_doctor.js"></script>
 
+</br>
 
-<h3 class="add-db">Add a doctor</h3>
-<p>To add a new doctor, please enter their information below and click `Submit`!</p>
-<form id="add-doctor-form" method="POST" action="/add-doctor-form">
-    <label for="input-fname">First Name: </label>
-    <input type="text" name="input-fname" id="input-fname-ajax">
-    
-    <label for="input-lname">Last Name: </label>
-    <input type="text" name="input-lname" id="input-lname-ajax">
+<div class="box">
+    <div class="add-db">
 
-    <label for="input-address">Address: </label>
-    <input type="text" name="input-address" id="input-address-ajax">
+        <h3>Add a doctor</h3>
 
-    <input type="submit">
-</form>
+        <form class="box-sub" id="add-doctor-form" method="POST" action="/add-doctor-form">
+            <p>To add a new doctor, please enter their information below and click `Submit`!</p>
+            <label for="input-fname">First Name: </label>
+            <input type="text" name="input-fname" id="input-fname-ajax">
+            
+            <label for="input-lname">Last Name: </label>
+            <input type="text" name="input-lname" id="input-lname-ajax">
 
-{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./js/add_doctor.js"></script>
+            <label for="input-address">Address: </label>
+            <input type="text" name="input-address" id="input-address-ajax">
 
+            <input type="submit">
+        </form>
 
-<h3 class="search-db">Search for a doctor</h3>
-<p>Search by first OR last name using the field below. Partial names are OK too!</p>
-<form id="search-doctor-html" method='GET' action='/doctors'>
-    <label for="input-lname">Search: </label>
-    <input type="text" name="doctor_name" id="input-lname-html-search">
-    
-    <input type="submit">
-    <a href='/doctors'><button>Reset</button></a>
-</form>
+        </br>
+        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+        <script src="./js/add_doctor.js"></script>
 
-<h2>Updating A Doctor's address</h2>
-<p></p>
-<form id="update-doctor-form-ajax">
+        <div class="box-dot">
+            <h3>Search for a doctor</h3>
+            
+            <form class="box-sub" id="search-doctor-html" method='GET' action='/doctors'>
+                <p>Search by first OR last name using the field below. Partial names are OK too!</p>
+                <label for="input-lname">Search: </label>
+                <input type="text" name="doctor_name" id="input-lname-html-search">
+                
+                <input type="submit">
+                <a href='/doctors'><button>Reset</button></a>
+            </form>
+        </div>
 
-    <label for="input-fullname">Full name: </label>
-    <select name="input-fullname" id="doctorSelect">
-        <option value="test">Select a doctor</option>
-        {{#each data}}
-        <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
-        {{/each}}
-    </select>
+        <h3>Updating A Doctor's address</h3>
 
-    <label for="input-update-address">Address: </label>
-    <input type="text" name="update_address" id="input-address-html-update">
+        <form class="box-sub" id="update-doctor-form-ajax">
 
-    <input type="submit">
+            <label for="input-fullname">Full name: </label>
+            <select name="input-fullname" id="doctorSelect">
+                <option value="test">Select a doctor</option>
+                {{#each data}}
+                <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+                {{/each}}
+            </select>
 
-</form>
+            <label for="input-update-address">Address: </label>
+            <input type="text" name="update_address" id="input-address-html-update">
+
+            <input type="submit">
+
+        </form>
+    </div>
+</div>
 
 <script src="./js/update_doctor.js"></script>

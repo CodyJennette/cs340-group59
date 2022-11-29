@@ -1,23 +1,22 @@
-<a href="/">Home</a>
-<a href="/patients">Patients</a>
-<a href="/doctors">Doctors</a>
-<a href="/invoices">Invoices</a>
-<a href="/patients-doctors">Patients' Doctors</a>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/patients">Patients</a>
+    <a href="/doctors">Doctors</a>
+    <a href="/invoices">Invoices</a>
+    <a href="/patients-doctors">Patients' Doctors</a>
+</div>
 
 <h2>Insurance Plans</h2>
 <p>View, add, delete, and update <strong>insurance plans</strong> here.</p>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
 
-{{!-- Create a table --}}
+
 <table id="plans-table">>
 
-    {{!-- Header section --}}
     <thead>
-
-        {{!-- For just the first row, we print each key of the row object as a header cell so we
-        know what each column means when the page renders --}}
         <tr>
             <th>Id</th>
             <th>Plan Name</th>
@@ -33,6 +32,7 @@
         {{!-- For each row, print the id, fname, lname, insurance and age, in order --}}
         {{#each data}}
         <tr data-value={{this.insurance_plan_id}}>>
+            <td>{{this.insurance_plan_id}}</td>
             <td>{{this.plan_name}}</td>
             <td>{{this.number_of_patients}}</td>
             <td>{{this.bill_frequency}}</td>
@@ -43,25 +43,31 @@
 </table>
 <script src="./js/delete_plan.js"></script>
 
-<!-- /views/index.hbs -->
-<h3 class="add-db">Add a plan here...</h3>
-<p>To add a new patient, please enter their information below and click `Submit`!</p>
-<form id="add-plan-form" method="POST" action="/add-plan-form">
-    <label for="input-pname">Plan Name: </label>
-    <input type="text" name="input-pname" id="input-pname">
-    
-    <label for="input-number-patients">Number of Patients: </label>
-    <input type="text" name="input-number-patients" id="input-number-patients">
+</br>
 
-    <label for="input-frequency">Bill Frequency</label>
-    <select name="input-frequency" id="input-frequency">
-        <option value="">Select a frequency</option>
-        {{#each frequency}}
-        <option value="{{this.insurance_plan_id}}">{{this.bill_frequency}}</option>
-        {{/each}}
-    </select>
+<div class="box">
+    <div class="add-db">
 
-    <input type="submit">
-</form>
+        <h3>Add a plan here...</h3>
+        <form class="box-sub" id="add-plan-form" method="POST" action="/add-plan-form">
+            <p>To add a new plan, please enter the information below and click <strong> Submit</strong>!</p>
+            <label for="input-pname">Plan Name: </label>
+            <input type="text" name="input-pname" id="input-pname">
+            
+            <label for="input-number-patients">Number of Patients: </label>
+            <input type="text" name="input-number-patients" id="input-number-patients">
+
+            <label for="input-frequency">Bill Frequency</label>
+            <select name="input-frequency" id="input-frequency">
+                <option value="">Select a frequency</option>
+                {{#each frequency}}
+                <option value="{{this.insurance_plan_id}}">{{this.bill_frequency}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+    </div>
+</div>
 
 <!-- /views/index.hbs -->
