@@ -1,14 +1,29 @@
 -- Group 59
 -- Corianne Frankovitch
 -- Cody Jennette
--- DDL.sql (Step 3 version)
+-- DDL.sql (Step 5 draft version)
 
 -- MySQL Workbench Forward Engineering
 
-SET foreign_key_checks = 0;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET AUTOCOMMIT = 0;
 
-CREATE OR REPLACE TABLE `InsurancePlans` (
+
+-- -----------------------------------------------------
+-- Schema cs340_jennettc
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema cs340_jennettc
+-- -----------------------------------------------------
+-- CREATE SCHEMA IF NOT EXISTS `cs340_jennettc` DEFAULT CHARACTER SET utf8 ;
+-- USE `cs340_jennettc` ;
+
+-- -----------------------------------------------------
+-- Table `cs340_jennettc`.`InsurancePlans`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cs340_jennettc`.`InsurancePlans` (
   `insurance_plan_id` INT NOT NULL AUTO_INCREMENT,
   `plan_name` VARCHAR(255) NULL,
   `number_of_patients` INT NOT NULL,
@@ -19,28 +34,28 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Patients`
+-- Table `cs340_jennettc`.`Patients`
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE `Patients` (
+CREATE TABLE IF NOT EXISTS `cs340_jennettc`.`Patients` (
   `patient_id` INT NOT NULL AUTO_INCREMENT,
   `patient_first_name` VARCHAR(255) NOT NULL,
   `patient_last_name` VARCHAR(255) NOT NULL,
-  `insurance_plan_id` INT NOT NULL,
+  `insurance_plan_id` INT,
   PRIMARY KEY (`patient_id`, `insurance_plan_id`),
   INDEX `fk_Patients_InsurancePlans1_idx` (`insurance_plan_id` ASC) VISIBLE,
   UNIQUE INDEX `patient_id_UNIQUE` (`patient_id` ASC) VISIBLE,
   CONSTRAINT `fk_Patients_InsurancePlans1`
     FOREIGN KEY (`insurance_plan_id`)
-    REFERENCES `InsurancePlans` (`insurance_plan_id`)
+    REFERENCES `cs340_jennettc`.`InsurancePlans` (`insurance_plan_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Doctors`
+-- Table `cs340_jennettc`.`Doctors`
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE `Doctors` (
+CREATE TABLE IF NOT EXISTS `cs340_jennettc`.`Doctors` (
   `doctor_id` INT NOT NULL AUTO_INCREMENT,
   `doctor_name` VARCHAR(255) NOT NULL,
   `doctor_address` VARCHAR(255) NULL,
@@ -49,9 +64,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Invoices`
+-- Table `cs340_jennettc`.`Invoices`
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE `Invoices` (
+CREATE TABLE IF NOT EXISTS `cs340_jennettc`.`Invoices` (
   `invoice_id` INT NOT NULL AUTO_INCREMENT,
   `due_date` DATE NOT NULL,
   `amount_due` DECIMAL(19,2) NOT NULL,
@@ -66,35 +81,35 @@ CREATE OR REPLACE TABLE `Invoices` (
   INDEX `fk_Invoices_Patients1_idx` (`patient_id` ASC) VISIBLE,
   CONSTRAINT `fk_Invoices_Doctors1`
     FOREIGN KEY (`doctor_id`)
-    REFERENCES `Doctors` (`doctor_id`)
+    REFERENCES `cs340_jennettc`.`Doctors` (`doctor_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Invoices_Patients1`
     FOREIGN KEY (`patient_id`)
-    REFERENCES `Patients` (`patient_id`)
-    ON DELETE CASCADE
+    REFERENCES `cs340_jennettc`.`Patients` (`patient_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Patients_Doctors`
+-- Table `cs340_jennettc`.`Patients_Doctors`
 -- -----------------------------------------------------
-CREATE OR REPLACE TABLE `Patients_Doctors` (
+CREATE TABLE IF NOT EXISTS `cs340_jennettc`.`Patients_Doctors` (
   `patient_doctor_id` INT NOT NULL AUTO_INCREMENT,
-  `patient_id` INT NULL,
+  `patient_id` INT NOT NULL,
   `doctor_id` INT NOT NULL,
   PRIMARY KEY (`patient_doctor_id`),
   INDEX `fk_Patients_has_Doctors_Doctors1_idx` (`doctor_id` ASC) VISIBLE,
   INDEX `fk_Patients_has_Doctors_Patients1_idx` (`patient_doctor_id` ASC, `patient_id` ASC) VISIBLE,
   CONSTRAINT `fk_Patients_has_Doctors_Patients1`
     FOREIGN KEY (`patient_doctor_id`)
-    REFERENCES `Patients` (`patient_id`)
-    ON DELETE CASCADE
+    REFERENCES `cs340_jennettc`.`Patients` (`patient_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Patients_has_Doctors_Doctors1`
     FOREIGN KEY (`doctor_id`)
-    REFERENCES `Doctors` (`doctor_id`)
+    REFERENCES `cs340_jennettc`.`Doctors` (`doctor_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -128,5 +143,6 @@ VALUES
 INSERT INTO `Patients_Doctors` (`patient_id`,`doctor_id`)
 VALUES (3, 3), (1, 1), (4, 4), (5, 5), (2, 2);
 
-SET foreign_key_checks = 1;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 COMMIT;

@@ -75,7 +75,7 @@ app.get('/patients', function(req, res)
                 return Object.assign(person, {insurance_plan_id: planmap[person.insurance_plan_id]})
             })
 
-            return res.render('patients', {data: people, plans: plans});
+            return res.render('patients.hbs', {data: people, plans: plans});
         })
     })
 });
@@ -134,7 +134,6 @@ app.get('/doctors', function(req, res)
     })
 });
 
-
 app.get('/invoices', function(req, res)
     {
     // Declare Query 1
@@ -152,16 +151,49 @@ app.get('/invoices', function(req, res)
         query1 = `SELECT * FROM Invoices WHERE services_billed LIKE "${req.query.services_billed}%" OR services_billed LIKE "%${req.query.services_billed}%";`
     }
 
+    let query2 = "SELECT * FROM Doctors;";
+    let query3 = "SELECT * FROM Patients;";
+
     // Run the 1st query
     db.pool.query(query1, function(error, rows, fields){
         
         let invoices = rows;
 
-        return res.render('invoices.hbs', {data: invoices});
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+            
+            // Save the doctor table rows
+            let doctors = rows;
 
-    })
-});
+            // Construct an object for reference in the table
+            let doctormap = {}
+            doctors.map(doctor => {
+                let id = parseInt(doctor.doctor_id, 10);
 
+                doctormap[id] = doctor["doctor_name"];
+            })
+
+            // Run the third query
+            db.pool.query(query3, (error, rows, fields) => {
+
+                // Save the patient table rows
+                let patients = rows;
+
+                let planmap = {}
+                patients.map(plan => {
+                    let id = parseInt(plan.patient_id, 10);
+                    planmap[id] = [plan["patient_first_name"], plan["patient_last_name"]].join(' ');
+                })
+
+                invoices = invoices.map(person => {
+                    return Object.assign(person, {doctor_id: doctormap[person.doctor_id], patient_id: planmap[person.patient_id]})
+                })
+
+                    return res.render('invoices.hbs', {data: invoices, doctors: doctors, patients: patients});
+                })
+            })
+        })
+    });
 
 app.get('/patients-doctors', function(req, res)
 {
@@ -191,7 +223,6 @@ app.get('/patients-doctors', function(req, res)
         ORDER BY Doctors.doctor_name;`
     }
 
-    
     let query2 = "SELECT * FROM Patients ORDER BY Patients.patient_last_name;";
     let query3 = "SELECT * FROM Doctors;"
     // Run the 1st query
@@ -205,8 +236,6 @@ app.get('/patients-doctors', function(req, res)
             
             // Save the patients
             let patients = rows;
-            
-            
 
             let planmap = {}
             patients.map(plan => {
@@ -418,8 +447,6 @@ app.put('/put-person-ajax', function(req,res,next){
                   })
               }
   })});
-
-//////////////  DOCTORS
 
 
 app.post('/add-doctor-form', function(req, res){
