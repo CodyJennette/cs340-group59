@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 25011;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 25013;                 // Set a port number at the top so it's easy to change in the future
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -299,56 +299,29 @@ app.post('/add-patient-form', function(req, res){
     })
 });
 
-
-app.post('/add-invoice-form', function(req, res){
-    // Capture the incoming data and parse it back to a JS object
-    let invoice = req.body;
-
-    // Capture NULL values
-    let paid_amount = parseInt(invoice['input-paidamount']);
-    if (isNaN(paid_amount))
-    {
-        paid_amount = 'NULL'
-    }
-
-    // Create the query and run it on the database
-    query1 = `INSERT INTO Invoices (due_date, amount_due, service_date, services_billed, paid_amount, paid_date, doctor_id, patient_id) VALUES ('${invoice['input-duedate']}', '${invoice['input-amountdue']}', '${invoice['input-servicedate']}', '${invoice['input-servicesbilled']}', '${paid_amount}', '${invoice['input-paiddate']}', '${invoice['input-doctor']}', '${invoice['input-patient']}')`;
-    db.pool.query(query1, function(error, rows, fields){
-
-        // Check to see if there was an error
-        if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error)
-            res.sendStatus(400);
-        }
-
-        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM Invoices and
-        // presents it on the screen
-        else
-        {
-            res.redirect('invoices');
-        }
-    })
-});
-
-
 app.post('/add-patient-ajax', function(req, res)
 {
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-
-    // Capture NULL values age
-    let insurance_plan = parseInt(data.insurance_plan_id);
     
-    if (isNaN(insurance_plan))
-    {
-        insurance_plan = 'NULL'
+    formatData(data)
+
+    let insurancePlan
+    let firstName = data.patient_first_name;
+    let lastName = data.patient_last_name;
+
+    if (data.insurance_plan_id != null) {
+        insurancePlan = parseInt(data.insurance_plan_id);
+    } else {
+        insurancePlan = data.insurance_plan_id;
     }
+    
+    console.log(data)
+
 
     // Create the query and run it on the database
-    query1 = `INSERT INTO Patients (patient_first_name, patient_last_name, insurance_plan_id) VALUES ('${data.patient_first_name}', '${data.patient_last_name}', ${insurance_plan})`;
-    db.pool.query(query1, function(error, rows, fields){
+    query1 = `INSERT INTO Patients (patient_first_name, patient_last_name, insurance_plan_id) VALUES (?, ?, ?)`;
+    db.pool.query(query1, [firstName, lastName, insurancePlan], function(error, rows, fields){
 
         // Check to see if there was an error
         if (error) {
@@ -382,84 +355,56 @@ LEFT JOIN InsurancePlans ON Patients.insurance_plan_id = InsurancePlans.insuranc
     })
 });
 
-app.delete('/delete-patient-ajax/', function(req,res,next){
-  let data = req.body;
-  let patientID = parseInt(data.patient_id);
-  let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE patient_id = ?`;
-  let deletePatients = `DELETE FROM Patients WHERE patient_id = ?`;
-
-
-        // Run the 1st query
-        db.pool.query(deletePatients_Doctors, [patientID], function(error, rows, fields){
-            if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-            console.log(error);
-            res.sendStatus(400);
-            }
-
-            else
-            {
-                // Run the second query
-                db.pool.query(deletePatients, [patientID], function(error, rows, fields) {
-
-                    if (error) {
-                        console.log(error);
-                        res.sendStatus(400); 
-                    } else {
-                        res.sendStatus(204);
-                    }
-                })
-            }
-})});
-
-app.put('/put-person-ajax', function(req,res,next){                                   
-    let data = req.body;
-
-    let insurance_plan= parseInt(data.plan);
-    let person = parseInt(data.fullname);
+app.post('/add-plan-ajax', function(req, res)
+  {
+      // Capture the incoming data and parse it back to a JS object
+      let data = req.body;
+      formatData(data)
   
-    queryUpdatePlan = `UPDATE Patients SET insurance_plan_id = ? WHERE Patients.patient_id = ?`;
-    selectPlan = `SELECT * FROM InsurancePlans WHERE insurance_plan_id = ?`
+      let plan = data.plan_name;
+      let num_patients = data.number_of_patients;
+      let frequency = data.bill_frequency;
   
-          // Run the 1st query
-          db.pool.query(queryUpdatePlan, [insurance_plan, person], function(error, rows, fields){
-              if (error) {
+      // Create the query and run it on the database
+      query1 = `INSERT INTO InsurancePlans(plan_name, number_of_patients, bill_frequency) VALUES (?,?,?)`;
+      
+      db.pool.query(query1, [plan, num_patients, frequency], function(error, rows, fields){
+  
+          // Check to see if there was an error
+          if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
+              console.log(error)
               res.sendStatus(400);
-              }
-  
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
-              // table on the front-end
-              else
-              {
-                  // Run the second query
-                  db.pool.query(selectPlan, [insurance_plan], function(error, rows, fields) {
-          
-                      if (error) {
-                          console.log(error);
-                          res.sendStatus(400);
-                      } else {
-                          res.send(rows);
-                      }
-                  })
-              }
-  })});
+          }
+          else
+          {   
+              //if there was no error, perform a SELECT * on Doctors
+              query2 = `SELECT * FROM InsurancePlans;`;
+              db.pool.query(query2, function(error, rows, fields){
+                  if (error) {
+                      console.log(error);
+                      res.sendStatus(400);
+                  }
+                  else
+                  {
+                      res.send(rows);
+                  }
+              })
+          }
+      })
+  });
 
 
 app.post('/add-doctor-form', function(req, res){
+
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
-    //formatData(data);
-    // Capture NULL values
-    //let address = parseInt(data['input-address']);
+    
     let first = data['input-fname'];
     let last = data['input-lname'];
     let fullName = [first,' ', last].join('');
     let address = data['input-address'];
-    console.log(address)
 
     query1 = `INSERT INTO Doctors (doctor_name, doctor_address) VALUES ('${fullName}', '${address}')`;
     db.pool.query(query1, function(error, rows, fields){
@@ -472,8 +417,7 @@ app.post('/add-doctor-form', function(req, res){
             res.sendStatus(400);
         }
 
-        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM bsg_people and
-        // presents it on the screen
+        // If there was no error, we redirect back to our root route
         else
         {
             res.redirect('doctors');
@@ -486,11 +430,15 @@ app.post('/add-doctor-ajax', function(req, res)
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
     formatData(data)
+
+    let address = data.address;
+    let doctor = data.doctor_name;
     // Capture NULL values of Name.
 
     // Create the query and run it on the database
-    query1 = `INSERT INTO Doctors (doctor_name, doctor_address) VALUES ('${data.doctor_name}', '${data.address}')`;
-    db.pool.query(query1, function(error, rows, fields){
+    query1 = `INSERT INTO Doctors(doctor_name, doctor_address) VALUES (?,?)`;
+    //query1 = `INSERT INTO Doctors (doctor_name, doctor_address) VALUES ('${data.doctor_name}', '${data.address}')`;
+    db.pool.query(query1, [doctor, address], function(error, rows, fields){
 
         // Check to see if there was an error
         if (error) {
@@ -517,14 +465,24 @@ app.post('/add-doctor-ajax', function(req, res)
     })
 });
 
-app.post('/add-patient-doctor-form', function(req, res){
+
+app.post('/add-invoice-form', function(req, res){
     // Capture the incoming data and parse it back to a JS object
-    let data = req.body;
-    let patient= data['input-patient'];
-    let doctor = data['input-doctor'];
+    let invoice = req.body;
+
+    // Capture NULL values
+    let paid_amount = parseInt(invoice['input-paidamount']);
+
+    if (isNaN(paid_amount))
+    {
+        paid_amount = 'NULL'
+    }
 
     // Create the query and run it on the database
-    query1 = `INSERT INTO Patients_Doctors (patient_id, doctor_id) VALUES ('${data['input-patient']}', '${data['input-doctor']}')`;
+    query1 = `INSERT INTO Invoices (due_date, amount_due, service_date, services_billed, paid_amount, paid_date, doctor_id, patient_id) VALUES ('${invoice['input-duedate']}', '${invoice['input-amountdue']}', '${invoice['input-servicedate']}', '${invoice['input-servicesbilled']}', '${paid_amount}', '${invoice['input-paiddate']}', '${invoice['input-doctor']}', '${invoice['input-patient']}')`;
+
+    query2 = `INSERT INTO Patients_Doctors (patient_id, doctor_id) VALUES ('${invoice['input-patient']}','${invoice['input-doctor']}');`;
+
     db.pool.query(query1, function(error, rows, fields){
 
         // Check to see if there was an error
@@ -535,14 +493,280 @@ app.post('/add-patient-doctor-form', function(req, res){
             res.sendStatus(400);
         }
 
-        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM Patients and
+        // If there was no error, we redirect back to our root route, which automatically runs the SELECT * FROM Invoices and
         // presents it on the screen
         else
         {
-            res.redirect('patients-doctors');
+            db.pool.query(query2, function(error,rows,fields) {
+                if(error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+
+                else {
+                    res.redirect('invoices');
+                }
+
+            });
+                
+            
         }
     })
 });
+
+app.post('/add-patient-doctor-ajax', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    formatData(data);
+
+    let patient= parseInt(data.patient_id);
+    let doctor = parseInt(data.doctor_id);
+
+    console.log(patient, doctor)
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO Patients_Doctors (patient_id, doctor_id) VALUES (?,?);`;
+    db.pool.query(query1, [patient, doctor], function(error, rows, fields){
+    query2 = `SELECT Patients_Doctors.patient_doctor_id, Patients_Doctors.patient_id, Patients_Doctors.doctor_id, Patients.patient_first_name, Patients.patient_last_name, Doctors.doctor_name
+    FROM Patients_Doctors
+    LEFT JOIN Doctors ON Patients_Doctors.doctor_id = Doctors.doctor_id
+    LEFT JOIN Patients ON Patients_Doctors.patient_id = Patients.patient_id`;
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal so we know what went wrong
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        else
+        {   
+            db.pool.query(query2, function(error, rows, fields){
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                else
+                {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+});
+
+
+app.put('/put-person-ajax', function(req,res,next){                                   
+    let data = req.body;
+    formatData(data)
+
+    let insurancePlan
+    let patient = parseInt(data.fullname);
+
+    if (data.plan != null) {
+        insurancePlan = parseInt(data.plan);
+    } else {
+        insurancePlan = data.plan
+    }
+  
+    queryUpdatePlan = `UPDATE Patients SET insurance_plan_id = ? WHERE Patients.patient_id = ?`;
+    selectPlan = `SELECT * FROM InsurancePlans WHERE insurance_plan_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdatePlan, [insurancePlan, patient], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectPlan, [insurancePlan], function(error, rows, fields) {
+          
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      } else {
+                          console.log(rows)
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
+
+  app.put('/put-plan-ajax', function(req,res,next){                                   
+    let data = req.body;
+    formatData(data)
+    console.log(data)
+    
+    let plan = parseInt(data.plan_id);
+    let frequency = data.frequency;
+    let number_patients = parseInt(data.number_patients)
+
+    // if (address === null || doctor === null) {
+    //  console.log(error);
+    //    res.sendStatus(400);
+    // }
+  
+    queryUpdatePlan = `UPDATE InsurancePlans SET bill_frequency = ?, number_of_patients = ? WHERE InsurancePlans.insurance_plan_id = ?`;
+    selectPlan = `SELECT * FROM InsurancePlans WHERE insurance_plan_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdatePlan, [frequency, number_patients, plan], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong
+              console.log(error);
+              res.sendStatus(400);
+              }
+              
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectPlan, [plan], function(error, rows, fields) {
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      }
+                      
+                      else {
+                          console.log(rows)
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
+
+
+
+app.put('/put-doctor-ajax', function(req,res,next){                                   
+    let data = req.body;
+    formatData(data)
+    
+    let address = data.address;
+    let doctor = parseInt(data.fullname);
+
+  
+    queryUpdateAddress = `UPDATE Doctors SET doctor_address = ? WHERE Doctors.doctor_id = ?`;
+    selectAddress = `SELECT * FROM Doctors WHERE doctor_id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateAddress, [address, doctor], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              
+              else
+              {
+                  // Run the second query
+                  db.pool.query(selectAddress, [doctor], function(error, rows, fields) {
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400);
+                      }
+                      
+                      else {
+                          console.log(rows)
+                          res.send(rows);
+                      }
+                  })
+              }
+  })});
+
+
+app.delete('/delete-patient-ajax/', function(req,res,next){
+  let data = req.body;
+  let patientID = parseInt(data.patient_id);
+  let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE patient_id = ?`;
+  let deletePatients = `DELETE FROM Patients WHERE patient_id = ?`;
+
+
+        // Run the 1st query
+        db.pool.query(deletePatients_Doctors, [patientID], function(error, rows, fields){
+            if (error) {
+
+            // Log the error to the terminal so we know what went wrong
+            console.log(error);
+            res.sendStatus(400);
+            }
+
+            else
+            {
+                // Run the second query
+                db.pool.query(deletePatients, [patientID], function(error, rows, fields) {
+
+                    if (error) {
+                        console.log(error);
+                        res.sendStatus(400); 
+                    } else {
+                        res.sendStatus(204);
+                    }
+                })
+            }
+})});
+
+app.delete('/delete-plan-ajax/', function(req,res,next){
+
+    let data = req.body;
+    let planID = parseInt(data.insurance_plan_id);
+    let deletePlan  = `DELETE FROM InsurancePlans WHERE insurance_plan_id = ?`;
+  
+  
+          // Run the 1st query
+          db.pool.query(deletePlan, [planID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              else {
+                res.sendStatus(204);
+              }
+  })});
+
+app.delete('/delete-doctor-ajax/', function(req,res,next){
+
+    let data = req.body;
+    let doctorID = parseInt(data.doctor_id);
+    let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE doctor_id = ?`;
+    let deleteDoctors = `DELETE FROM Doctors WHERE doctor_id = ?`;
+  
+  
+          // Run the 1st query
+          db.pool.query(deletePatients_Doctors, [doctorID], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              else
+              {
+                  // Run the second query
+                  db.pool.query(deleteDoctors, [doctorID], function(error, rows, fields) {
+  
+                      if (error) {
+                          console.log(error);
+                          res.sendStatus(400); 
+                      } else {
+                          res.sendStatus(204);
+                      }
+                  })
+              }
+})});
 
 app.delete('/delete-invoice-ajax/', function(req,res,next){
     let invoice = req.body;
@@ -554,7 +778,7 @@ app.delete('/delete-invoice-ajax/', function(req,res,next){
           db.pool.query(deleteInvoices, [invoiceID], function(error, rows, fields){
               if (error) {
   
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              // Log the error to the terminal so we know what went wrong
               console.log(error);
               res.sendStatus(400);
               }
@@ -574,70 +798,37 @@ app.delete('/delete-invoice-ajax/', function(req,res,next){
               }
   })});
 
-app.delete('/delete-doctor-ajax/', function(req,res,next){
-  let data = req.body;
-  let doctorID = parseInt(data.doctor_id);
-  let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE doctor_id = ?`;
-  let deleteDoctors = `DELETE FROM Doctors WHERE doctor_id = ?`;
+  app.delete('/delete-patient-doctor-ajax/', function(req,res,next){
+    
+    let data = req.body;
+    let pdID = parseInt(data.patient_doctor_id);
+    //let patient = parseInt(data.patient_id);
+    //let doctor = parseInt(data.doctor_id);
 
+    let deletePatients_Doctors  = `DELETE FROM Patients_Doctors WHERE patient_doctor_id = ?`; 
 
-        // Run the 1st query
-        db.pool.query(deletePatients_Doctors, [doctorID], function(error, rows, fields){
+        db.pool.query(deletePatients_Doctors, [pdID], function(error, rows, fields){
+                
             if (error) {
-
-            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    
             console.log(error);
             res.sendStatus(400);
             }
-
-            else
-            {
-                // Run the second query
-                db.pool.query(deleteDoctors, [doctorID], function(error, rows, fields) {
-
-                    if (error) {
-                        console.log(error);
-                        res.sendStatus(400); 
-                    } else {
-                        res.sendStatus(204);
-                    }
-                })
+        
+            else {
+                res.sendStatus(204);
             }
+        
 })});
 
-app.put('/put-doctor-ajax', function(req,res,next){                                   
-    let data = req.body;
-    formatData(data)
-    
-    let address= data.address;
-    let doctor = parseInt(data.fullname);
+
   
-    queryUpdateAddress = `UPDATE Doctors SET address = ? WHERE Doctors.doctor_id = ?`;
-    //selectPlan = `SELECT * FROM InsurancePlans WHERE insurance_plan_id = ?`
-  
-          // Run the 1st query
-          db.pool.query(queryUpdateAddress, [address, doctor], function(error, rows, fields){
-              if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
-              res.sendStatus(400);
-              }
-  
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
-              // table on the front-end
-              else
-              {
-                res.send(rows);
-              }
-  })});
-  
-// function to be use with routes to turn empty strings into NULL values for DB
+// function to be use with routes to turn empty strings into NULL values for database
 function formatData(data) {
     for (const key of Object.keys(data)) {
         if (typeof data[key]=== 'string') {
             if (data[key].trim()==='') {
-                data[key] = null
+                data[key] = null;
             } else {
                 data[key]= `${data[key]}`;
             }

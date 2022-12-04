@@ -120,8 +120,8 @@ addRowToTable = (data) => {
 // creates message if unsatisfactory input (ie empty fields). if message = 1, input is good.
 function checkDoctorValidity(firstNameValue, lastNameValue, addressValue) {
 
-    if (firstNameValue == "") {
-        let message = "Can first names be that short?"
+    if (firstNameValue.length < 1) {
+        let message = "Ideally put in a first initial..."
         return message
     }
 

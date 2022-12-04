@@ -1,3 +1,33 @@
+///  HTML that could go with patients-doctors page if wanted to manually add patient doctor relationships.
+
+{/*  <div class="add-db">
+
+    <h3>Add a patient-doctor here...</h3>
+        <form class="box-sub" id="add-patient-doctor-form-ajax">
+            <p>To add a new patient, please enter their information below and click `Submit`!</p>
+            <label for="input-patient">Patient: </label>
+            <select name="input-patient" id="input-patient-ajax">
+                <option value="">Select a Patient</option>
+                {{#each patients}}
+                <option value="{{this.patient_id}}">{{this.patient_first_name}}  {{this.patient_last_name}}</option>
+                {{/each}}
+            </select>
+
+            <label for="input-doctor">Doctor: </label>
+            <select name="input-doctor" id="input-doctor-ajax">
+                <option value="">Select a Doctor</option>
+                {{#each doctors}}
+                <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+        <script src="./js/add_patient_doctor.js"></script> */}
+
+
+
+
 // Get the objects we need to modify
 let addPatientDoctorForm = document.getElementById('add-patient-doctor-form-ajax');
 

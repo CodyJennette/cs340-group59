@@ -42,7 +42,7 @@
             <td>{{this.services_billed}}</td>
             <td>{{this.paid_amount}}</td>
             <td>{{this.paid_date}}</td>
-            <td>{{this.doctor_id}}</td>
+            <td>Dr. {{this.doctor_id}}</td>
             <td>{{this.patient_id}}</td>
             <td><button onclick="confirmDeleteInvoice({{this.invoice_id}})">Delete</button></td>
         </tr>
@@ -80,10 +80,22 @@
             <input type="date" name="input-paiddate" id="input-paiddate-ajax">
 
             <label for="input-doctor">Doctor: </label>
-            <input type="text" name="input-doctor" id="input-doctor-ajax">
+            {{!-- <input type="text" name="input-doctor" id="input-doctor-ajax"> --}}
+            <select name="input-doctor" id="input-doctor">
+                    <option>Select a Doctor</option>
+                    {{#each doctors}}
+                    <option value="{{this.doctor_id}}">{{this.doctor_name}}</option>
+                    {{/each}}
+                </select>
 
             <label for="input-patient">Patient: </label>
-            <input type="text" name="input-patient" id="input-patient-ajax">
+            {{!-- <input type="text" name="input-patient" id="input-patient-ajax"> --}}
+            <select name="input-patient" id="input-patient">
+                    <option>Select a Patient</option>
+                    {{#each patients}}
+                    <option value="{{this.patient_id}}">{{this.patient_first_name}} {{this.patient_last_name}}</option>
+                    {{/each}}
+                </select>
 
             <input type="submit">
         </form>
