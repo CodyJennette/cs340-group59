@@ -17,7 +17,6 @@
 <table id="doctor-table">>
 
     <thead>
-
         <tr>
             <th>Id</th>
             <th>Name</th>
@@ -35,7 +34,7 @@
             <td>{{this.doctor_id}}</td>
             <td>{{this.doctor_name}}</td>
             <td>{{this.doctor_address}}</td>
-            <td><button onclick="deleteDoctor({{this.doctor_id}})">Delete</button></td>
+            <td><button onclick="confirmDeleteDoctor({{this.doctor_id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
@@ -46,39 +45,6 @@
 
 <div class="box">
     <div class="add-db">
-
-        <h3>Add a doctor</h3>
-
-        <form class="box-sub" id="add-doctor-form" method="POST" action="/add-doctor-form">
-            <p>To add a new doctor, please enter their information below and click `Submit`!</p>
-            <label for="input-fname">First Name: </label>
-            <input type="text" name="input-fname" id="input-fname-ajax">
-            
-            <label for="input-lname">Last Name: </label>
-            <input type="text" name="input-lname" id="input-lname-ajax">
-
-            <label for="input-address">Address: </label>
-            <input type="text" name="input-address" id="input-address-ajax">
-
-            <input type="submit">
-        </form>
-
-        </br>
-        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-        <script src="./js/add_doctor.js"></script>
-
-        <div class="box-dot">
-            <h3>Search for a doctor</h3>
-            
-            <form class="box-sub" id="search-doctor-html" method='GET' action='/doctors'>
-                <p>Search by first OR last name using the field below. Partial names are OK too!</p>
-                <label for="input-lname">Search: </label>
-                <input type="text" name="doctor_name" id="input-lname-html-search">
-                
-                <input type="submit">
-                <a href='/doctors'><button>Reset</button></a>
-            </form>
-        </div>
 
         <h3>Updating A Doctor's address</h3>
 
@@ -92,13 +58,49 @@
                 {{/each}}
             </select>
 
-            <label for="input-update-address">Address: </label>
+            <label for="input-update-address">Address:</label>
             <input type="text" name="update_address" id="input-address-html-update">
 
             <input type="submit">
 
         </form>
+        <script src="./js/update_doctor.js"></script>
+        </br>
+        
+
+        <div class="box-dot">
+            <h3>Search for a doctor</h3>
+            
+            <form class="box-sub" id="search-doctor-html" method='GET' action='/doctors'>
+                <p>Search by first OR last name using the field below. (Partial names are okay, too).</p>
+                <label for="input-lname">Search: </label>
+                <input type="text" name="doctor_name" id="input-lname-html-search">
+                
+                <input type="submit">
+                <a href='/doctors'><button>Reset</button></a>
+            </form>
+        </div>
+
+        <h3>Add a doctor</h3>
+
+        <form class="box-sub" id="add-doctor-form-ajax">
+            
+            <p>To add a new doctor, please enter their information below and click `Submit`!</p>
+            <label for="input-fname">First Name: </label>
+            <input type="text" name="input-fname" id="input-fname-ajax">
+            
+            <label for="input-lname">Last Name: </label>
+            <input type="text" name="input-lname" id="input-lname-ajax">
+
+            <label for="input-address">Address: </label>
+            <input type="text" name="input-address" id="input-address-ajax">
+
+            <input type="submit">
+        </form>
+        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+        <script src="./js/add_doctor.js"></script>
+
+        
     </div>
 </div>
 
-<script src="./js/update_doctor.js"></script>

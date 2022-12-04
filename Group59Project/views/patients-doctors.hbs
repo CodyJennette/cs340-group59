@@ -37,18 +37,18 @@
             <td>{{this.patient_doctor_id}}</td>
             <td>{{this.patient_id}}</td>
             <td>{{this.doctor_id}}</td>
-            <td><button onclick="deletePatientDoctor({{this.patient_doctor_id}})">Delete</button></td>
+            <td><button onclick="confirmDeletePatientDoctor({{this.patient_doctor_id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-<script src="./js/delete_patient-doctor.js"></script>
+<script src="./js/delete_patient_doctor.js"></script>
 </br>
 
 <div class="box">
     <div class="add-db">
     <h3>Add a patient-doctor here...</h3>
-        <form class="box-sub" id="add-patient-doctor-form" method="POST" action="/add-patient-doctor-form">
+        <form class="box-sub" id="add-patient-doctor-form-ajax">
             <p>To add a new patient, please enter their information below and click `Submit`!</p>
             <label for="input-patient">Patient: </label>
             <select name="input-patient" id="input-patient-ajax">
@@ -68,6 +68,7 @@
 
             <input type="submit">
         </form>
+        <script src="./js/add_patient_doctor.js"></script>
     
 
     </br>

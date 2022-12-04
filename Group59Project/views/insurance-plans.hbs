@@ -36,7 +36,7 @@
             <td>{{this.plan_name}}</td>
             <td>{{this.number_of_patients}}</td>
             <td>{{this.bill_frequency}}</td>
-            <td><button onclick="deletePlan({{this.insurance_plan_id}})">Delete</button></td>
+            <td><button onclick="confirmDeletePlan({{this.insurance_plan_id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
@@ -48,25 +48,68 @@
 <div class="box">
     <div class="add-db">
 
+        <h3>Updating An Existing Insurance Plan</h3>
+
+        <form class="box-sub" id="update-plan-form-ajax">
+
+            <label for="input-plan-name">Plan name:</label>
+            <select name="input-plan-name" id="planSelect">
+                <option>Select an insurance plan</option>
+                {{#each data}}
+                <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
+                {{/each}}
+            </select>
+
+            <label for="input-number-patients">Number of Patients: </label>
+            <input type="text" name="input-number-patients" id="input-number-patients">
+
+            <label for="input-frequency">Bill Frequency:</label>
+            <select name="input-frequency" id="input-frequency">
+                <option value="None">Select a frequency</option>
+                <option value="monthly">monthly</option>
+                <option value="weekly">weekly</option>
+                <option value="biweekly">biweekly</option>
+                
+            </select>
+
+            <input type="submit">
+        </form>
+        <script src="./js/update_plan.js"></script>
+
+        </br>
+        <div class="box-dot">
+            <h3>Search for a plan</h3>
+            
+            <form class="box-sub" id="search-plan-html" method='GET' action='/insurance-plans'>
+                <p>Search by Plan Name</p>
+                <label for="input-lname">Search: </label>
+                <input type="text" name="plan_name" id="input-plan-html-search">
+                
+                <input type="submit">
+                <a href='/insurance-plans'><button>Reset</button></a>
+            </form>
+        </div>
+
         <h3>Add a plan here...</h3>
-        <form class="box-sub" id="add-plan-form" method="POST" action="/add-plan-form">
+        <form class="box-sub" id="add-plan-form-ajax">
             <p>To add a new plan, please enter the information below and click <strong> Submit</strong>!</p>
             <label for="input-pname">Plan Name: </label>
             <input type="text" name="input-pname" id="input-pname">
             
             <label for="input-number-patients">Number of Patients: </label>
-            <input type="text" name="input-number-patients" id="input-number-patients">
+            <input type="number" name="input-number-patients" id="input-number">
 
-            <label for="input-frequency">Bill Frequency</label>
-            <select name="input-frequency" id="input-frequency">
-                <option value="">Select a frequency</option>
-                {{#each frequency}}
-                <option value="{{this.insurance_plan_id}}">{{this.bill_frequency}}</option>
-                {{/each}}
+            <label for="input-frequency">Bill Frequency:</label>
+            <select name="input-frequency" id="frequencySelect">
+                <option>Select a frequency</option>
+                <option value="monthly">monthly</option>
+                <option value="weekly">weekly</option>
+                <option value="biweekly">biweekly</option>
             </select>
 
             <input type="submit">
         </form>
+        <script src="./js/add_plan.js"></script>
     </div>
 </div>
 

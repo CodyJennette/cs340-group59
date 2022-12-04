@@ -1,3 +1,12 @@
+function confirmDeleteDoctor(doctorID) {
+  var result = confirm("You sure you want to delete this provider?");
+  if (result==true) {
+   return deleteDoctor(doctorID);
+  } else {
+   return false;
+  }
+}
+
 function deleteDoctor(doctorID) {
     // Put our data we want to send in a javascript object
     let data = {
@@ -13,11 +22,10 @@ function deleteDoctor(doctorID) {
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 204) {
 
-            // Add the new data to the table
             deleteRow(doctorID);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
-            console.log("There was an error with the input.")
+            console.log("There was an error with deleting.")
         }
     }
     // Send the request and wait for the response

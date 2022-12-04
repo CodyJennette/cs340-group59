@@ -14,14 +14,11 @@ updatePersonForm.addEventListener("submit", function (e) {
     // Get the values from the form fields
     let fullNameValue = inputFullName.value;
     let insurancePlanValue = inputInsurancePlan.value;
-    
-    // currently the database table for bsg_people does not allow updating values to NULL
-    // so we must abort if being bassed NULL for InsurancePlan
 
-    if (isNaN(insurancePlanValue)) 
-    {
-        return;
-    }
+    //if (isNaN(insurancePlanValue)) 
+    //{
+    //   return;
+    //}
 
 
     // Put our data we want to send in a javascript object
@@ -71,8 +68,12 @@ function updateRow(data, patientID){
             let td = updateRowIndex.getElementsByTagName("td")[3];
 
             // Reassign homeworld to our value we updated to
-            console.log(parsedData[0].plan_name)
-            td.innerHTML = parsedData[0].plan_name;
+            if (parsedData[0] === undefined) {
+                td.innerHTML = "";
+            } else {
+                td.innerHTML = parsedData[0].plan_name;
+            }
+            
        }
     }
 }

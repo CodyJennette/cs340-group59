@@ -1,22 +1,13 @@
-// code for deletePerson function using jQuery
-// function deletePerson(personID) {
-//   let link = '/delete-person-ajax/';
-//   let data = {
-//     id: personID
-//   };
 
-//   $.ajax({
-//     url: link,
-//     type: 'DELETE',
-//     data: JSON.stringify(data),
-//     contentType: "application/json; charset=utf-8", 
-//     success: function(result) {
-//       deleteRow(personID);
-//     }
-//   });
-// }
+function confirmDeletePatient(patientID) {
+  var result = confirm("You sure you want to delete this patient?");
+  if (result==true) {
+   return deletePatient(patientID);
+  } else {
+   return false;
+  }
+}
 
-// code for deletePerson using regular javascript/xhttp
 function deletePatient(patientID) {
     // Put our data we want to send in a javascript object
     let data = {
@@ -32,11 +23,10 @@ function deletePatient(patientID) {
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 204) {
 
-            // Add the new data to the table
             deleteRow(patientID);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
-            console.log("There was an error with the input.")
+            console.log("There was an error with deleting.")
         }
     }
     // Send the request and wait for the response

@@ -37,7 +37,7 @@
             <td>{{this.patient_first_name}}</td>
             <td>{{this.patient_last_name}}</td>
             <td>{{this.insurance_plan_id}}</td>
-            <td><button onclick="deletePatient({{this.patient_id}})">Delete</button></td>
+            <td><button onclick="confirmDeletePatient({{this.patient_id}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
@@ -49,47 +49,8 @@
 <!-- /views/index.hbs -->
 <div class="box">
     <div class="add-db">
-        <h3>Add a patient here...</h3>
-        <form class="box-sub" id="add-patient-form" method="POST" action="/add-patient-form">
-            <p>To add a new patient, please enter their information below and click `Submit`! Both a first and last name MUST be entered.</p>
-            <label for="input-fname">First Name: </label>
-            <input type="text" name="input-fname" id="input-fname-ajax">
-            
-            <label for="input-lname">Last Name: </label>
-            <input type="text" name="input-lname" id="input-lname-ajax">
 
-            <label for="input-insurance">Insurance Plan: </label>
-            <select name="input-insurance" id="input-insurance-ajax">
-                <option value="">Select an Insurance Plan</option>
-                {{#each plans}}
-                <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
-                {{/each}}
-            </select>
-
-            <input type="submit">
-        </form>
-
-        <!-- /views/index.hbs -->
-
-        </br>
-
-
-        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-        <script src="./js/add_patient.js"></script>
-        <div class="box-dot">
-            <h3>Search for a patient...</h3>
-            <form class="box-sub" id="search-person-html" method='GET' action='/patients'>
-                <p>Search for patients by last name</p>
-                <label for="input-lname">Search by Last Name: </label>
-                <input type="text" name="patient_last_name" id="input-lname-html-search">
-                
-                <input type="submit">
-                <a href='/patients'><button>Reset</button></a>
-            </form>
-        </div>
-        </br>
-
-        <h3>Update A User's Insurance...</h3>
+        <h3>Update A Patient's Insurance...</h3>
             <form class="box-sub" id="update-person-form-ajax">
 
                 <label for="input-fullname">Full name: </label>
@@ -103,6 +64,7 @@
                 <label for="input-insurance">Insurance Plan: </label>
                 <select name="input-insurance" id="input-insurance-update">
                     <option>Select an Insurance Plan</option>
+                    <option value="">None</option>
                     {{#each plans}}
                     <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
                     {{/each}}
@@ -110,7 +72,46 @@
                 <input type="submit">
 
             </form>
+            <script src="./js/update_person.js"></script>
+
+        </br>
+
+        {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+        
+        <div class="box-dot">
+            <h3>Search for a patient...</h3>
+            <form class="box-sub" id="search-person-html" method='GET' action='/patients'>
+                <p>Search for patients by last name</p>
+                <label for="input-lname">Search by Last Name: </label>
+                <input type="text" name="patient_last_name" id="input-lname-html-search">
+                
+                <input type="submit">
+                <a href='/patients'><button>Reset</button></a>
+            </form>
+        </div>
+        </br>
+
+        <h3>Add a patient here...</h3>
+        <form class="box-sub" id="add-patient-form-ajax">
+            <p>To add a new patient, please enter their information below and click `Submit`! Both a first and last name MUST be entered.</p>
+            <label for="input-fname">First Name: </label>
+            <input type="text" name="input-fname" id="input-fname-ajax">
+            
+            <label for="input-lname">Last Name: </label>
+            <input type="text" name="input-lname" id="input-lname-ajax">
+
+            <label for="input-insurance">Insurance Plan: </label>
+            <select name="input-insurance" id="input-insurance-ajax">
+                <option value="">Select an Insurance Plan</option>
+                <option value="">None</option>
+                {{#each plans}}
+                <option value="{{this.insurance_plan_id}}">{{this.plan_name}}</option>
+                {{/each}}
+            </select>
+
+            <input type="submit">
+        </form>
+        <script src="./js/add_patient.js"></script>
+        
     </div>
 </div>
-
-<script src="./js/update_person.js"></script>

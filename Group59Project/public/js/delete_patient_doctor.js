@@ -1,28 +1,28 @@
-function confirmDeleteInvoice(invoiceID) {
-  var result = confirm("You sure you want to delete this invoice?");
+function confirmDeletePatientDoctor(patientDoctorID) {
+  var result = confirm("You sure you want to delete this patient-provider relationship?");
   if (result==true) {
-   return deleteInvoice(invoiceID);
+   return deletePatientDoctor(patientDoctorID);
   } else {
    return false;
   }
 }
 
-function deleteInvoice(invoiceID) {
+function deletePatientDoctor(patientDoctorID) {
     // Put our data we want to send in a javascript object
     let data = {
-        invoice_id: invoiceID
+        patient_doctor_id: patientDoctorID
     };
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/delete-invoice-ajax", true);
+    xhttp.open("DELETE", "/delete-patient-doctor-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 204) {
 
-            deleteRow(invoiceID);
+            deleteRow(patientDoctorID);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
             console.log("There was an error with deleting.")
@@ -32,27 +32,15 @@ function deleteInvoice(invoiceID) {
     xhttp.send(JSON.stringify(data));
 }
 
-function deleteRow(invoiceID){
+function deleteRow(patientDoctorID){
 
-    let table = document.getElementById("invoice-table");
+    let table = document.getElementById("pd-table");
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
        //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == invoiceID) {
+       if (table.rows[i].getAttribute("data-value") == patientDoctorID) {
             table.deleteRow(i);
-            deleteDropDownMenu(invoiceID);
             break; 
        }
     }
-}
-
-
-function deleteDropDownMenu(invoiceID){
-  let selectMenu = document.getElementById("invoiceSelect");
-  for (let i = 0; i < selectMenu.length; i++){
-    if (Number(selectMenu.options[i].value) === Number(invoiceID)){
-      selectMenu[i].remove();
-      break;
-    }
-  }
 }

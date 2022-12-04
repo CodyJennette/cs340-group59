@@ -1,28 +1,30 @@
-function confirmDeleteInvoice(invoiceID) {
-  var result = confirm("You sure you want to delete this invoice?");
-  if (result==true) {
-   return deleteInvoice(invoiceID);
-  } else {
-   return false;
+function confirmDeletePlan(insurancePlanId) {
+    var result = confirm("You sure you want to delete?");
+    if (result==true) {
+     return deletePlan(insurancePlanId);
+    } else {
+     return false;
+    }
   }
-}
 
-function deleteInvoice(invoiceID) {
+
+function deletePlan(insurancePlanId) {
     // Put our data we want to send in a javascript object
+
     let data = {
-        invoice_id: invoiceID
+        insurance_plan_id: insurancePlanId
     };
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "/delete-invoice-ajax", true);
+    xhttp.open("DELETE", "/delete-plan-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 204) {
 
-            deleteRow(invoiceID);
+            deleteRow(insurancePlanId);
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
             console.log("There was an error with deleting.")
@@ -32,27 +34,28 @@ function deleteInvoice(invoiceID) {
     xhttp.send(JSON.stringify(data));
 }
 
-function deleteRow(invoiceID){
+function deleteRow(insurancePlanId){
 
-    let table = document.getElementById("invoice-table");
+    let table = document.getElementById("plans-table");
     for (let i = 0, row; row = table.rows[i]; i++) {
        //iterate through rows
        //rows would be accessed using the "row" variable assigned in the for loop
-       if (table.rows[i].getAttribute("data-value") == invoiceID) {
+       if (table.rows[i].getAttribute("data-value") == insurancePlanId) {
             table.deleteRow(i);
-            deleteDropDownMenu(invoiceID);
+            deleteDropDownMenu(insurancePlanId);
             break; 
        }
     }
 }
 
 
-function deleteDropDownMenu(invoiceID){
-  let selectMenu = document.getElementById("invoiceSelect");
+function deleteDropDownMenu(insurancePlanId){
+  let selectMenu = document.getElementById("planSelect");
   for (let i = 0; i < selectMenu.length; i++){
-    if (Number(selectMenu.options[i].value) === Number(invoiceID)){
+    if (Number(selectMenu.options[i].value) === Number(insurancePlanId)){
       selectMenu[i].remove();
       break;
     }
+
   }
 }

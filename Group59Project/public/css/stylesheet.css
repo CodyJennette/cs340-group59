@@ -1,7 +1,7 @@
 
 body {
   font-family: Arial;
-  color: rgb(194, 216, 207);
+  color: rgb(66, 110, 139);
   font-size: 20px;
   background-color: rgba(228, 227, 225, 0.906);
   text-align-last: center;
@@ -11,6 +11,12 @@ body {
 
 main {
   background-color: rgb(210, 208, 208);
+}
+
+#wrapper {
+  margin-left:auto;
+  margin-right:auto;
+  width:1175px;
 }
 
 header.main {
@@ -32,17 +38,28 @@ p {
   font-size: 24px;
   text-shadow: 0.00px .00rem #ddd;
   color:rgb(4, 130, 130);
+  height:35px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.footer {
+  font-size: 16px;
+  color: purple;
 }
 
 .coded {
   font-family: Arial;
+  font-size: 24px;
   background-color: rgb(126, 126, 126);
+  text-align: center;
   color: wheat;
-  text-shadow: 0px;
   padding: 40px;
+  text-shadow: 0px;
   border-radius: 30px;
   border-style: solid;
   margin: auto;
+
 }
 
 .image {
@@ -122,13 +139,13 @@ th {
   padding-bottom: 12px;
   background-color:rgb(240, 179, 88);
   text-align: center;
-  height: 70px;
+  height: 50px;
 }
 
 th, td {
   width: auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
   border-bottom: 1px solid #ddd;
   margin-left: auto;
   margin-right: auto;
@@ -139,11 +156,11 @@ tr, td {
   border: 2px;
   color:rgb(40, 136, 102);
   padding: 10px;
-  height: 50px;
+  height: 40px;
 }
 
 h1 {
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Calibri;
   text-align: center;
   background-color: rgb(0, 77, 128);
   border-radius: 0.5rem;
@@ -175,11 +192,12 @@ h2 {
 h3 {
 font-size: 34px;
 font-family: Arial, Helvetica, sans-serif;
-color: rgb(232, 236, 170);
+color: rgba(228, 227, 225, 0.906);
 text-shadow: 0.2px .05rem rgb(134, 121, 117);
 size: 30px;
 margin: auto;
 padding: 10px;
+height: 30px;
 }
 
 .box {
@@ -195,11 +213,12 @@ border: 3px solid gray;
 }
 
 .box-sub {
+text-align: center;
 width: auto;
 background: rgb(240, 179, 88);
 text-align: center;
-margin-left: 150px;
-margin-right: 150px;
+margin-left: 125px;
+margin-right: 125px;
 margin-top: auto;
 margin-bottom: auto;
 padding: 10px;
@@ -277,8 +296,8 @@ input {
   border-style: line;
   width: fit-content;
   border:10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -301,20 +320,5 @@ select {
 label {
   padding: 10px;
 }
-
-.add, .edit {
-  border:rgb(40, 136, 102);
-  border-style: dotted;
-  border-radius: 0.5rem;
-  background-color: rgb(240, 179, 88);
-  padding-top: 30px;
-  padding-bottom: 30px;
-  width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-
 
 
